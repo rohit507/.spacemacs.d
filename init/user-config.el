@@ -135,7 +135,7 @@ codepoints starting from codepoint-start."
                        "<$" "<$>" "<!--" "<-" "<--" "<->" "<+" "<+>" "<="
                        "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<" "<~"
                        "<~~" "</" "</>" "~@" "~-" "~=" "~>" "~~" "~~>" "%%"
-                       "x" ":" "+" "+" "*")))
+                       "x" "+" "+" "+" "*")))
           (my-correct-symbol-bounds (my-ligature-list ligs #Xe100))))
 
   ;; nice glyphs for haskell with hasklig
