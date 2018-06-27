@@ -87,12 +87,23 @@
 
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
-   dotspacemacs-default-font '("Fira Code Retina"
-                               :size 15
-                               :weight normal
-                               :width normal
-                               :powerline-scale 1.5)
-                     ; ("Fira Code Symbol" :size 15))
+   dotspacemacs-default-font '(; ("Hasklig"
+                               ;  :size 15
+                               ;  :weight normal
+                               ;  :width normal
+                               ;  :powerline-scale 1.5)
+                               ("Fira Code Retina"
+                                :size 15
+                                :weight normal
+                                :width normal
+                                :powerline-scale 1.5)
+                               ; ("Fira Code"
+                               ;  :size 15
+                               ;  :weight normal
+                               ;  :width normal
+                               ;  :powerline-scale 1.5)
+                               ("Fira Code Symbol" :size 15)
+                               )
 
    ;; If non nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)

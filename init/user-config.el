@@ -7,10 +7,11 @@
 
 (defun dotspacemacs/user-config ()
   "Configuration that cannot be delegated to layers."
-  (dotspacemacs/user-config/toggles)
   (dotspacemacs/user-config/pandoc)
   ;(dotspacemacs/user-config/ligatures)
   (dotspacemacs/user-config/defeat-smartparens)
+  (dotspacemacs/user-config/line-width-bar)
+  (dotspacemacs/user-config/toggles)
   )
 
 (defun dotspacemacs/user-config/pandoc ()
@@ -59,28 +60,54 @@
   "Spacemacs toggles not intended to be put into layers."
   (spacemacs/toggle-highlight-long-lines-globally-on)
   (spacemacs/toggle-mode-line-minor-modes-off)
-  (spacemacs/toggle-aggressive-indent-globally-on)
+  ;(spacemacs/toggle-aggressive-indent-globally-on)
   (global-highlight-parentheses-mode 1)
   (rainbow-delimiters-mode-enable)
-  (fringe-modgit clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
-e '(0 . 8)))
+  )
+
 
 (defun dotspacemacs/user-config/ligatures ()
   "Add support for fira-code and hasklig ligatures."
 
+  ;(global-prettify-symbols-mode 1)
+
+  (defun replicate (list num)
+    "Creates a list with `num` replicas of `list`"
+    (if (<= num 0) '() (append list (replicate list (- num 1)))))
+
+  ; (defun make-spaces (el)
+  ;   (let* ((space-width (string-width (car el)))
+  ;          (out (append
+  ;                (replicate '(?\s (Br . Bl)) (- space-width 1))
+  ;                '(?\s (Br . Br))
+  ;                (list (decode-char 'ucs (cdr el))))))
+  ;     (progn (prin1 el) (prin1 (type-of out)) (prin1 out) (print "") out)))
+
+
+  ; (defun make-tabs (el)
+  ;   (let ((out (string ?\t (cdr el))))
+  ;     (progn (prin1 el) (prin1 (type-of out)) (prin1 out) (print "") out)))
+
+  (defun make-spaces (el)
+    (let ((space-width (string-width (car el))))
+         (append (replicate '(?\s (Br . Bl)) (- space-width 1))
+                 '(?\s (Br . Br))
+                  (list (decode-char 'ucs (cdr el))))))
+
+  (defun make-tabs (el) (string ?\t (cdr el)))
+
   (defun my-correct-symbol-bounds (pretty-alist)
     "Prepend a TAB character to each symbol in this alist,
-  is way compose-region called by prettify-symbols-mode
-  ll use the correct width of the symbols
-  stead of the width measured by char-width."
-    (mapcar (lambda (el)
-              (setcdr el (string ?\t (cdr el)))
-              el)
-            pretty-alist))
+this way compose-region called by prettify-symbols-mode
+will use the correct width of the symbols
+instead of the width measured by char-width."
+    ;(let ((out (mapcar (lambda (el) (setcdr el (make-tabs el)) el) pretty-alist)))
+    (let ((out (mapcar (lambda (el) (setcdr el (make-spaces el)) el) pretty-alist)))
+      (progn (print out) out)))
 
   (defun my-ligature-list (ligatures codepoint-start)
     "Create an alist of strings to replace with
-  depoints starting from codepoint-start."
+codepoints starting from codepoint-start."
     (let ((codepoints (-iterate '1+ codepoint-start (length ligatures))))
       (-zip-pair ligatures codepoints)))
 
@@ -93,6 +120,7 @@ e '(0 . 8)))
                        "<<" "<<<" "<+>" ".." "..." "++" "+++"
                        "/=" ":::" ">=>" "->>" "<=>" "<=<" "<->")))
           (my-correct-symbol-bounds (my-ligature-list ligs #Xe100))))
+
 
   (setq my-fira-code-ligatures
         (let* ((ligs '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\"
@@ -109,33 +137,30 @@ e '(0 . 8)))
                        "<~~" "</" "</>" "~@" "~-" "~=" "~>" "~~" "~~>" "%%"
                        "x" ":" "+" "+" "*")))
           (my-correct-symbol-bounds (my-ligature-list ligs #Xe100))))
+
   ;; nice glyphs for haskell with hasklig
   (defun my-set-hasklig-ligatures ()
     "Add hasklig ligatures for use with prettify-symbols-mode."
     (setq prettify-symbols-alist
           (append my-hasklig-ligatures prettify-symbols-alist))
     (prettify-symbols-mode))
-
-  ;; nice glyphs for haskell with fira-code
   (defun my-set-fira-code-ligatures ()
-    "Add fira-code ligatures for use with prettify-symbols-mode."
+    "Add hasklig ligatures for use with prettify-symbols-mode."
     (setq prettify-symbols-alist
           (append my-fira-code-ligatures prettify-symbols-alist))
-    (prettify-symbols-mode))
+    (prettify-symbols-mode)
+    (print prettify-symbols-alist))
 
   (add-hook 'prog-mode-hook 'my-set-fira-code-ligatures)
-  (add-hook 'haskell-mode-hook 'my-set-fira-code-ligatures)
-  (add-hook 'emacs-lisp-mode-hook 'my-set-fira-code-ligatures)
-
-
+  (my-set-fira-code-ligatures)
   )
 
-  ;; old stuff
+(defun dotspacemacs/user-config/line-width-bar ()
+  "Activate column indicator in prog-mode and text-mode"
+  (add-hook 'prog-mode-hook 'turn-on-fci-mode)
+  (add-hook 'text-mode-hook 'turn-on-fci-mode)
+  )
 
-  ;; Activate column indicator in prog-mode and text-mode
-  ;; (add-hook 'prog-mode-hook 'turn-on-fci-mode)
-  ;; (add-hook 'text-mode-hook 'turn-on-fci-mode)
-  ;; (setq fci-rule-color "#586e75")
 
   ;; ;; Enable org's table editor in markdown mode
   ;; (add-hook 'markdown-mode-hook 'turn-on-orgtbl)
@@ -170,134 +195,3 @@ e '(0 . 8)))
 
   ;; ;; bind table formatter to <SPC> m t
   ;; (spacemacs/set-leader-keys-for-major-mode 'markdown-mode "t" 'markdown-fmt-orgtbl)
-
-
-
-  ;;;;; Fira code (old method)
-  ;;;; This works when using emacs --daemon + emacsclient
-  ;;(add-hook 'after-make-frame-functions (lambda (frame) (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol")))
-  ;;;; This works when using emacs without server/client
-  ;;  ;;;; I haven't found one statement that makes both of the above situations work, so I use both for now
-  ;;(defconst fira-code-font-lock-keywords-alist
-  ;;  (mapcar (lambda (regex-char-pair)
-  ;;            `(,(car regex-char-pair)
-  ;;              (0 (prog1 ()
-  ;;                   (compose-region (match-beginning 1)
-  ;;                                   (match-end 1)
-  ;;                                   ;; The first argument to concat is a string containing a literal tab
-  ;;                                   ,(concat "	" (list (decode-char 'ucs (cadr regex-char-pair)))))))))
-  ;;          '(("\\(www\\)"                   #Xe100)
-  ;;            ("[^/]\\(\\*\\*\\)[^/]"        #Xe101)
-  ;;            ("\\(\\*\\*\\*\\)"             #Xe102)
-  ;;            ("\\(\\*\\*/\\)"               #Xe103):w
-  ;;            ("\\(\\*>\\)"                  #Xe104)
-  ;;            ("[^*]\\(\\*/\\)"              #Xe105)
-  ;;            ("\\(\\\\\\\\\\)"              #Xe106)
-  ;;            ("\\(\\\\\\\\\\\\\\)"          #Xe107)
-  ;;            ("\\({-\\)"                    #Xe108)
-  ;;            ("\\(\\[\\]\\)"                #Xe109)
-  ;;            ("\\(::\\)"                    #Xe10a)
-  ;;            ("\\(:::\\)"                   #Xe10b)
-  ;;            ("[^=]\\(:=\\)"                #Xe10c)
-  ;;            ("\\(!!\\)"                    #Xe10d)
-  ;;            ("\\(!=\\)"                    #Xe10e)
-  ;;            ("\\(!==\\)"                   #Xe10f)
-  ;;            ("\\(-}\\)"                    #Xe110)
-  ;;            ("\\(--\\)"                    #Xe111)
-  ;;            ("\\(---\\)"                   #Xe112)
-  ;;            ("\\(-->\\)"                   #Xe113)
-  ;;            ("[^-]\\(->\\)"                #Xe114)
-  ;;            ("\\(->>\\)"                   #Xe115)
-  ;;            ("\\(-<\\)"                    #Xe116)
-  ;;            ("\\(-<<\\)"                   #Xe117)
-  ;;            ("\\(-~\\)"                    #Xe118)
-  ;;            ("\\(#{\\)"                    #Xe119)
-  ;;            ("\\(#\\[\\)"                  #Xe11a)
-  ;;            ("\\(##\\)"                    #Xe11b)
-  ;;            ("\\(###\\)"                   #Xe11c)
-  ;;            ("\\(####\\)"                  #Xe11d)
-  ;;            ("\\(#(\\)"                    #Xe11e)
-  ;;            ("\\(#\\?\\)"                  #Xe11f)
-  ;;            ("\\(#_\\)"                    #Xe120)
-  ;;            ("\\(#_(\\)"                   #Xe121)
-  ;;            ("\\(\\.-\\)"                  #Xe122)
-  ;;            ("\\(\\.=\\)"                  #Xe123)
-  ;;            ("\\(\\.\\.\\)"                #Xe124)
-  ;;            ("\\(\\.\\.<\\)"               #Xe125)
-  ;;            ("\\(\\.\\.\\.\\)"             #Xe126)
-  ;;            ("\\(\\?=\\)"                  #Xe127)
-  ;;            ("\\(\\?\\?\\)"                #Xe128)
-  ;;            ("\\(;;\\)"                    #Xe129)
-  ;;            ("\\(/\\*\\)"                  #Xe12a)
-  ;;            ("\\(/\\*\\*\\)"               #Xe12b)
-  ;;            ("\\(/=\\)"                    #Xe12c)
-  ;;            ("\\(/==\\)"                   #Xe12d)
-  ;;            ("\\(/>\\)"                    #Xe12e)
-  ;;            ("\\(//\\)"                    #Xe12f)
-  ;;            ("\\(///\\)"                   #Xe130)
-  ;;            ("\\(&&\\)"                    #Xe131)
-  ;;            ("\\(||\\)"                    #Xe132)
-  ;;            ("\\(||=\\)"                   #Xe133)
-  ;;            ("[^|]\\(|=\\)"                #Xe134)
-  ;;            ("\\(|>\\)"                    #Xe135)
-  ;;            ("\\(\\^=\\)"                  #Xe136)
-  ;;            ("\\(\\$>\\)"                  #Xe137)
-  ;;            ("\\(\\+\\+\\)"                #Xe138)
-  ;;            ("\\(\\+\\+\\+\\)"             #Xe139)
-  ;;            ("\\(\\+>\\)"                  #Xe13a)
-  ;;            ("\\(=:=\\)"                   #Xe13b)
-  ;;            ("[^!/]\\(==\\)[^>]"           #Xe13c)
-  ;;            ("\\(===\\)"                   #Xe13d)
-  ;;            ("\\(==>\\)"                   #Xe13e)
-  ;;            ("[^=]\\(=>\\)"                #Xe13f)
-  ;;            ("\\(=>>\\)"                   #Xe140)
-  ;;            ("\\(<=\\)"                    #Xe141)
-  ;;            ("\\(=<<\\)"                   #Xe142)
-  ;;            ("\\(=/=\\)"                   #Xe143)
-  ;;            ("\\(>-\\)"                    #Xe144)
-  ;;            ("\\(>=\\)"                    #Xe145)
-  ;;            ("\\(>=>\\)"                   #Xe146)
-  ;;            ("[^-=]\\(>>\\)"               #Xe147)
-  ;;            ("\\(>>-\\)"                   #Xe148)
-  ;;            ("\\(>>=\\)"                   #Xe149)
-  ;;            ("\\(>>>\\)"                   #Xe14a)
-  ;;            ("\\(<\\*\\)"                  #Xe14b)
-  ;;            ("\\(<\\*>\\)"                 #Xe14c)
-  ;;            ("\\(<|\\)"                    #Xe14d)
-  ;;            ("\\(<|>\\)"                   #Xe14e)
-  ;;            ("\\(<\\$\\)"                  #Xe14f)
-  ;;            ("\\(<\\$>\\)"                 #Xe150)
-  ;;            ("\\(<!--\\)"                  #Xe151)
-  ;;            ("\\(<-\\)"                    #Xe152)
-  ;;            ("\\(<--\\)"                   #Xe153)
-  ;;            ("\\(<->\\)"                   #Xe154)
-  ;;            ("\\(<\\+\\)"                  #Xe155)
-  ;;            ("\\(<\\+>\\)"                 #Xe156)
-  ;;            ("\\(<=\\)"                    #Xe157)
-  ;;            ("\\(<==\\)"                   #Xe158)
-  ;;            ("\\(<=>\\)"                   #Xe159)
-  ;;            ("\\(<=<\\)"                   #Xe15a)
-  ;;            ("\\(<>\\)"                    #Xe15b)
-  ;;            ("[^-=]\\(<<\\)"               #Xe15c)
-  ;;            ("\\(<<-\\)"                   #Xe15d)
-  ;;            ("\\(<<=\\)"                   #Xe15e)
-  ;;            ("\\(<<<\\)"                   #Xe15f)
-  ;;            ("\\(<~\\)"                    #Xe160)
-  ;;            ("\\(<~~\\)"                   #Xe161)
-  ;;            ("\\(</\\)"                    #Xe162)
-  ;;            ("\\(</>\\)"                   #Xe163)
-  ;;            ("\\(~@\\)"                    #Xe164)
-  ;;            ("\\(~-\\)"                    #Xe165)
-  ;;            ("\\(~=\\)"                    #Xe166)
-  ;;            ("\\(~>\\)"                    #Xe167)
-  ;;            ("[^<]\\(~~\\)"                #Xe168)
-  ;;            ("\\(~~>\\)"                   #Xe169)
-  ;;            ("\\(%%\\)"                    #Xe16a)
-  ;;           ;; ("\\(x\\)"                   #Xe16b) This ended up being hard to do properly so i'm leaving it out.
-  ;;            ("[^:=]\\(:\\)[^:=]"           #Xe16c)
-  ;;            ("[^\\+<>]\\(\\+\\)[^\\+<>]"   #Xe16d)
-  ;;            ("[^\\*/<>]\\(\\*\\)[^\\*/<>]" #Xe16f))))
-  ;;
-  ;;(defun add-fira-code-symbol-keywords ()
-  ;;  (font-lock-add-keywords nil fira-code-font-lock-keywords-alist))
-  ;; <=>
