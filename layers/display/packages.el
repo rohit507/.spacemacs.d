@@ -17,7 +17,7 @@
         (pretty-fonts :location local)
         (pretty-magit :location local)
         (pretty-outlines :location local)
-        (windows-frame-size-fix :location local)
+        ;(windows-frame-size-fix :location local)
         ))
 
 ;;; Locals
@@ -30,22 +30,6 @@
     (progn
       (global-prettify-symbols-mode 1)
 
-      (setq hy-pretty-pairs
-            (pretty-code-get-pairs
-             '(;; Functional
-               :lambda
-               "fn"
-               :def "defn"
-
-               ;; Types
-               :null "None"
-
-               ;; Flow
-               :not "not" :in "in" :not-in "not-in"
-
-               ;; Other
-               :tuple "#t"  ; Tag macro for tuple casting
-               )))
 
       (setq python-pretty-pairs
             (pretty-code-get-pairs
@@ -74,8 +58,7 @@
             (pretty-code-get-pairs
              '(:def "defun")))
 
-      (pretty-code-set-pairs `((hy-mode-hook         ,hy-pretty-pairs)
-                               (python-mode-hook     ,python-pretty-pairs)
+      (pretty-code-set-pairs `((python-mode-hook     ,python-pretty-pairs)
                                (emacs-lisp-mode-hook ,emacs-lisp-pretty-pairs))))))
 
 ;;;; Pretty-eshell
