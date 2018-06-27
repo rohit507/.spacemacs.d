@@ -5,6 +5,6 @@
    theming
 
    ;; Personal layers
-   config
+   ;; config
    macros
    ))

@@ -59,7 +59,10 @@
    ;; A list of packages that will not be installed and loaded.
    ;; (default '())
    dotspacemacs-excluded-packages '(fringe
-                                    importmagic)
+                          importmagic
+                          hide-comnt
+                          help-fns+
+                          info+)
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -80,10 +83,8 @@
 
 (defvar dotspacemacs/layers/local
   '((macros :location local)    ; All local layers depend on this layer
-    ;(config :location local)    ; Org, Avy, Evil, Misc... config
-    (display :location local))   ; Pretty-eshell/code/outlines... pkgs
-    ;(langs :location local))    ; Language config
-
+    (display :location local)   ; Pretty-eshell/code/outlines... pkgs
+    )
   "Local layers housed in `~/.spacemacs.d/layers'.")
 
 ;;;; Core

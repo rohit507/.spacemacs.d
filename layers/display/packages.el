@@ -12,7 +12,7 @@
                                           :repo "Ilazki/prettify-utils.el"))
 
         ;; Owned Local Display Packages
-        (pretty-code :location local)
+        ; (pretty-code :location local)
         (pretty-eshell :location local)
         (pretty-fonts :location local)
         (pretty-magit :location local)
@@ -119,7 +119,9 @@
        '(;; Fira Code Ligatures
          (pretty-fonts-fira-font prog-mode-hook org-mode-hook)
          ;; Custom replacements not possible with `pretty-code' package
-         (pretty-fonts-hy-mode hy-mode-hook)))
+         ;(pretty-fonts-hy-mode hy-mode-hook)
+         )
+       )
 
       (pretty-fonts-set-fontsets
        '(("fontawesome"

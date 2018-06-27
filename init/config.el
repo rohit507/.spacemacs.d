@@ -88,10 +88,11 @@
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Fira Code Retina"
-                               :size 16
+                               :size 15
                                :weight normal
                                :width normal
                                :powerline-scale 1.5)
+                     ; ("Fira Code Symbol" :size 15))
 
    ;; If non nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
@@ -331,8 +332,7 @@
    ;; `recents' `bookmarks' `projects' `agenda' `todos'."
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
-   dotspacemacs-startup-lists '((recents . 5)
-                                (projects . 7))
+   dotspacemacs-startup-lists '((recents . 5) (projects . 7))
 
    ;; True if the home buffer should respond to resize events.
    dotspacemacs-startup-buffer-responsive t

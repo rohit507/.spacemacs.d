@@ -9,8 +9,9 @@
   "Configuration that cannot be delegated to layers."
   (dotspacemacs/user-config/toggles)
   (dotspacemacs/user-config/pandoc)
+  ;(dotspacemacs/user-config/ligatures)
   (dotspacemacs/user-config/defeat-smartparens)
-  (dotspacemacs/user-config/experiments))
+  )
 
 (defun dotspacemacs/user-config/pandoc ()
   "Automatically start pandoc mode in every markdown file"
@@ -61,11 +62,72 @@
   (spacemacs/toggle-aggressive-indent-globally-on)
   (global-highlight-parentheses-mode 1)
   (rainbow-delimiters-mode-enable)
-  (fringe-mode '(0 . 8)))
+  (fringe-modgit clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
+e '(0 . 8)))
 
-(defun dotspacemacs/user-config/experiments ()
-  "Space for trying out configuration updates."
-  ;; Nothing atm
+(defun dotspacemacs/user-config/ligatures ()
+  "Add support for fira-code and hasklig ligatures."
+
+  (defun my-correct-symbol-bounds (pretty-alist)
+    "Prepend a TAB character to each symbol in this alist,
+  is way compose-region called by prettify-symbols-mode
+  ll use the correct width of the symbols
+  stead of the width measured by char-width."
+    (mapcar (lambda (el)
+              (setcdr el (string ?\t (cdr el)))
+              el)
+            pretty-alist))
+
+  (defun my-ligature-list (ligatures codepoint-start)
+    "Create an alist of strings to replace with
+  depoints starting from codepoint-start."
+    (let ((codepoints (-iterate '1+ codepoint-start (length ligatures))))
+      (-zip-pair ligatures codepoints)))
+
+                                        ; list can be found at https://github.com/i-tu/Hasklig/blob/master/GlyphOrderAndAliasDB#L1588
+  (setq my-hasklig-ligatures
+        (let* ((ligs '("&&" "***" "*>" "\\\\" "||" "|>" "::"
+                       "==" "===" "==>" "=>" "=<<" "!!" ">>"
+                       ">>=" ">>>" ">>-" ">-" "->" "-<" "-<<"
+                       "<*" "<*>" "<|" "<|>" "<$>" "<>" "<-"
+                       "<<" "<<<" "<+>" ".." "..." "++" "+++"
+                       "/=" ":::" ">=>" "->>" "<=>" "<=<" "<->")))
+          (my-correct-symbol-bounds (my-ligature-list ligs #Xe100))))
+
+  (setq my-fira-code-ligatures
+        (let* ((ligs '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\"
+                       "{-" "[]" "::" ":::" ":=" "!!" "!=" "!==" "-}"
+                       "--" "---" "-->" "->" "->>" "-<" "-<<" "-~"
+                       "#{" "#[" "##" "###" "####" "#(" "#?" "#_" "#_("
+                       ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*"
+                       "/**" "/=" "/==" "/>" "//" "///" "&&" "||" "||="
+                       "|=" "|>" "^=" "$>" "++" "+++" "+>" "=:=" "=="
+                       "===" "==>" "=>" "=>>" "<=" "=<<" "=/=" ">-" ">="
+                       ">=>" ">>" ">>-" ">>=" ">>>" "<*" "<*>" "<|" "<|>"
+                       "<$" "<$>" "<!--" "<-" "<--" "<->" "<+" "<+>" "<="
+                       "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<" "<~"
+                       "<~~" "</" "</>" "~@" "~-" "~=" "~>" "~~" "~~>" "%%"
+                       "x" ":" "+" "+" "*")))
+          (my-correct-symbol-bounds (my-ligature-list ligs #Xe100))))
+  ;; nice glyphs for haskell with hasklig
+  (defun my-set-hasklig-ligatures ()
+    "Add hasklig ligatures for use with prettify-symbols-mode."
+    (setq prettify-symbols-alist
+          (append my-hasklig-ligatures prettify-symbols-alist))
+    (prettify-symbols-mode))
+
+  ;; nice glyphs for haskell with fira-code
+  (defun my-set-fira-code-ligatures ()
+    "Add fira-code ligatures for use with prettify-symbols-mode."
+    (setq prettify-symbols-alist
+          (append my-fira-code-ligatures prettify-symbols-alist))
+    (prettify-symbols-mode))
+
+  (add-hook 'prog-mode-hook 'my-set-fira-code-ligatures)
+  (add-hook 'haskell-mode-hook 'my-set-fira-code-ligatures)
+  (add-hook 'emacs-lisp-mode-hook 'my-set-fira-code-ligatures)
+
+
   )
 
   ;; old stuff
@@ -109,72 +171,13 @@
   ;; ;; bind table formatter to <SPC> m t
   ;; (spacemacs/set-leader-keys-for-major-mode 'markdown-mode "t" 'markdown-fmt-orgtbl)
 
-  ;; Add support for fira-code and hasklig ligatures.
-  ;; (defun my-correct-symbol-bounds (pretty-alist)
-  ;;   "Prepend a TAB character to each symbol in this alist,
-  ;; is way compose-region called by prettify-symbols-mode
-  ;; ll use the correct width of the symbols
-  ;; stead of the width measured by char-width."
-  ;;   (mapcar (lambda (el)
-  ;;             (setcdr el (string ?\t (cdr el)))
-  ;;             el)
-  ;;           pretty-alist))
-
-  ;; (defun my-ligature-list (ligatures codepoint-start)
-  ;;   "Create an alist of strings to replace with
-  ;; depoints starting from codepoint-start."
-  ;;   (let ((codepoints (-iterate '1+ codepoint-start (length ligatures))))
-  ;;     (-zip-pair ligatures codepoints)))
-
-  ;; ; list can be found at https://github.com/i-tu/Hasklig/blob/master/GlyphOrderAndAliasDB#L1588
-  ;; (setq my-hasklig-ligatures
-  ;;   (let* ((ligs '("&&" "***" "*>" "\\\\" "||" "|>" "::"
-  ;;                  "==" "===" "==>" "=>" "=<<" "!!" ">>"
-  ;;                  ">>=" ">>>" ">>-" ">-" "->" "-<" "-<<"
-  ;;                  "<*" "<*>" "<|" "<|>" "<$>" "<>" "<-"
-  ;;                  "<<" "<<<" "<+>" ".." "..." "++" "+++"
-  ;;                  "/=" ":::" ">=>" "->>" "<=>" "<=<" "<->")))
-  ;;     (my-correct-symbol-bounds (my-ligature-list ligs #Xe100))))
-
-  ;; (setq my-fira-code-ligatures
-  ;;       (let* ((ligs '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\"
-  ;;                      "{-" "[]" "::" ":::" ":=" "!!" "!=" "!==" "-}"
-  ;;                      "--" "---" "-->" "->" "->>" "-<" "-<<" "-~"
-  ;;                      "#{" "#[" "##" "###" "####" "#(" "#?" "#_" "#_("
-  ;;                      ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*"
-  ;;                      "/**" "/=" "/==" "/>" "//" "///" "&&" "||" "||="
-  ;;                      "|=" "|>" "^=" "$>" "++" "+++" "+>" "=:=" "=="
-  ;;                      "===" "==>" "=>" "=>>" "<=" "=<<" "=/=" ">-" ">="
-  ;;                      ">=>" ">>" ">>-" ">>=" ">>>" "<*" "<*>" "<|" "<|>"
-  ;;                      "<$" "<$>" "<!--" "<-" "<--" "<->" "<+" "<+>" "<="
-  ;;                      "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<" "<~"
-  ;;                      "<~~" "</" "</>" "~@" "~-" "~=" "~>" "~~" "~~>" "%%"
-  ;;                      "x" ":" "+" "+" "*")))
-  ;;         (my-correct-symbol-bounds (my-ligature-list ligs #Xe100))))
-
-  ;; ;; nice glyphs for haskell with hasklig
-  ;; (defun my-set-hasklig-ligatures ()
-  ;;   "Add hasklig ligatures for use with prettify-symbols-mode."
-  ;;   (setq prettify-symbols-alist
-  ;;         (append my-hasklig-ligatures prettify-symbols-alist))
-  ;;   (prettify-symbols-mode))
-
-  ;; ;; nice glyphs for haskell with fira-code
-  ;; (defun my-set-fira-code-ligatures ()
-  ;;   "Add fira-code ligatures for use with prettify-symbols-mode."
-  ;;   (setq prettify-symbols-alist
-  ;;         (append my-fira-code-ligatures prettify-symbols-alist))
-  ;;   (prettify-symbols-mode))
-
-  ;; (add-hook 'prog-mode-hook 'my-set-fira-code-ligatures)
 
 
   ;;;;; Fira code (old method)
   ;;;; This works when using emacs --daemon + emacsclient
   ;;(add-hook 'after-make-frame-functions (lambda (frame) (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol")))
   ;;;; This works when using emacs without server/client
-  ;;(set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol")
-  ;;;; I haven't found one statement that makes both of the above situations work, so I use both for now
+  ;;  ;;;; I haven't found one statement that makes both of the above situations work, so I use both for now
   ;;(defconst fira-code-font-lock-keywords-alist
   ;;  (mapcar (lambda (regex-char-pair)
   ;;            `(,(car regex-char-pair)
@@ -297,6 +300,4 @@
   ;;
   ;;(defun add-fira-code-symbol-keywords ()
   ;;  (font-lock-add-keywords nil fira-code-font-lock-keywords-alist))
-  ;;
-  ;;(add-hook 'prog-mode-hook
-  ;;          #'add-fira-code-symbol-keywords)
+  ;; <=>
