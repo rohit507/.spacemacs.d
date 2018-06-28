@@ -71,10 +71,6 @@
 
   ;(global-prettify-symbols-mode 1)
 
-  (defun replicate (list num)
-    "Creates a list with `num` replicas of `list`"
-    (if (<= num 0) '() (append list (replicate list (- num 1)))))
-
   ; (defun make-spaces (el)
   ;   (let* ((space-width (string-width (car el)))
   ;          (out (append
@@ -90,9 +86,9 @@
 
   (defun make-spaces (el)
     (let ((space-width (string-width (car el))))
-         (append (replicate '(?\s (Br . Bl)) (- space-width 1))
-                 '(?\s (Br . Br))
-                  (list (decode-char 'ucs (cdr el))))))
+      (append  (make-list (- space-width 1) '(?\s (Br . Bl)))
+              '(?\s (Br . Br))
+               (list (decode-char 'ucs (cdr el))))))
 
   (defun make-tabs (el) (string ?\t (cdr el)))
 
@@ -159,6 +155,7 @@ codepoints starting from codepoint-start."
   "Activate column indicator in prog-mode and text-mode"
   (add-hook 'prog-mode-hook 'turn-on-fci-mode)
   (add-hook 'text-mode-hook 'turn-on-fci-mode)
+  (setq fci-rule-color "#586e75")
   )
 
 
