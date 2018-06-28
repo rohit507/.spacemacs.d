@@ -36,7 +36,7 @@
   ;; and `nil'. `unused' will lazy install only unused layers (i.e. layers
   ;; not listed in variable `dotspacemacs-configuration-layers'), `all' will
   ;; lazy install any layer that support lazy installation even the layers
-  ;; listed in `dotspacemacs-configuration-layers'. `nil' disable the lazy
+  ;; in `dotspacemacs-configuration-layers'. `nil' disable the lazy
   ;; installation feature and you have to explicitly list a layer in the
   ;; variable `dotspacemacs-configuration-layers' to install it.
   ;; (default 'unused)
@@ -109,7 +109,11 @@
          org-want-todo-bindings t)
 
     (shell :variables
-           shell-default-shell 'eshell)
+           shell-default-shell 'ansi-term
+           shell-default-position 'full
+	   shell-default-full-span nil
+           )
+
 
     (version-control :variables
                      version-control-global-margin t
@@ -132,7 +136,6 @@
     ;; Languages
     c-c++
     emacs-lisp
-    javascript
     rust
     shell-scripts
     ruby
