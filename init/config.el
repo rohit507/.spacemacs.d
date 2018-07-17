@@ -48,7 +48,7 @@
    dotspacemacs-line-numbers '(:relative nil
                                :disabled-for-modes dired-mode
                                                    doc-view-mode
-                                                   pdf-view-mode
+                                                   pdf-view-mod
                                :size-limit-kb 1000)
 
    ;; If non-nil smartparens-strict-mode will be enabled in programming modes.
@@ -120,7 +120,7 @@
    ;; If non nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup f
+   dotspacemacs-maximized-at-startup nil
 
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
@@ -373,7 +373,7 @@
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner 'random
+   dotspacemacs-startup-banner 'official
 
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.

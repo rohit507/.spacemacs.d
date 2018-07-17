@@ -6,7 +6,7 @@
         all-the-icons
         all-the-icons-ivy
         all-the-icons-dired
-        pretty-mode
+        ;pretty-mode
         spaceline-all-the-icons
         (prettify-utils :location (recipe :fetcher github
                                           :repo "Ilazki/prettify-utils.el"))

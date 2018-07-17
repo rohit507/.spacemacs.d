@@ -54,7 +54,8 @@
    ;; (default '())
    dotspacemacs-additional-packages '(solarized-theme
                                       nord-theme
-                                      faceup)
+                                      faceup
+                                      protobuf-mode)
 
    ;; A list of packages that will not be installed and loaded.
    ;; (default '())
@@ -99,19 +100,23 @@
 
     (auto-completion :variables
                      auto-completion-return-key-behavior 'complete
-                     auto-completion-tab-key-behavior 'complete
+                     auto-completion-tab-key-behavior 'cycle
                      auto-completion-enable-snippets-in-popup t)
+
     (auto-completion
          (haskell :variables haskell-completion-backend 'intero))
+
     (ivy :variables
-         ivy-extra-directories nil)
+         ivy-extra-directories nil
+         ivy-re-builders-alist 'ivy--regex-fuzzy)
+
     (org :variables
          org-want-todo-bindings t)
 
     (shell :variables
-           shell-default-shell 'ansi-term
-           shell-default-position 'full
-	   shell-default-full-span nil
+           shell-default-term-shell "/user/bin/fish"
+           shell-default-position 'bottom
+	         shell-default-full-span nil
            )
 
 
@@ -120,6 +125,7 @@
                      version-control-diff-tool 'git-gutter+))
 
   "Layers I consider core to Spacemacs.")
+
 
 ;;;; Langs
 
@@ -144,6 +150,7 @@
              haskell-completion-backend 'intero
              haskell-enable-hindent-style "johan-tibell"
              haskell-process-type 'stack-ghci)
+
     (python :variables
             python-sort-imports-on-save t
             python-test-runner 'pytest
