@@ -45,7 +45,11 @@
    ;;                       text-mode
    ;;   :size-limit-kb 1000)
    ;; (default nil)
-   dotspacemacs-line-numbers t
+   dotspacemacs-line-numbers '(:relative nil
+                               :disabled-for-modes dired-mode
+                                                   doc-view-mode
+                                                   pdf-view-mod
+                               :size-limit-kb 1000)
 
    ;; If non-nil smartparens-strict-mode will be enabled in programming modes.
    ;; (default nil)
@@ -88,20 +92,20 @@
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '(; ("Hasklig"
-                               ;  :size 15
+                               ;  :size 13
                                ;  :weight normal
                                ;  :width normal
-                               ;  :powerline-scale 1.5)
+                               ;  :powerline-scale 2)
                                ("Fira Code Retina"
                                 :size 20
                                 :weight normal
                                 :width normal
-                                :powerline-scale 1.5)
+                                :powerline-scale 2)
                                ; ("Fira Code"
-                               ;  :size 15
+                               ;  :size 13
                                ;  :weight normal
                                ;  :width normal
-                               ;  :powerline-scale 1.5)
+                               ;  :powerline-scale 2)
                                ("Fira Code Symbol" :size 20)
                                )
 
@@ -126,21 +130,41 @@
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's inactive or deselected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
-   dotspacemacs-inactive-transparency 100
+   dotspacemacs-inactive-transparency 50
 
    ;; If non nil unicode symbols are displayed in the mode line. (default t)
    dotspacemacs-mode-line-unicode-symbols t
 
-   ;; TODO
+   ;; Either nil or a number of seconds. If non-nil zone out after the specified
+   ;; number of seconds. (default nil)
    dotspacemacs-zone-out-when-idle nil
 
-   ;; TODO
+   ;; Format specification for setting the frame title.
+   ;; %a - the `abbreviated-file-name', or `buffer-name'
+   ;; %t - `projectile-project-name'
+   ;; %I - `invocation-name'
+   ;; %S - `system-name'
+   ;; %U - contents of $USER
+   ;; %b - buffer name
+   ;; %f - visited file name
+   ;; %F - frame name
+   ;; %s - process status
+   ;; %p - percent of buffer above top of window, or Top, Bot or All
+   ;; %P - percent of buffer above bottom of window, perhaps plus Top, or Bot or All
+   ;; %m - mode name
+   ;; %n - Narrow if appropriate
+   ;; %z - mnemonics of buffer, terminal, and keyboard coding systems
+   ;; %Z - like %z, but including the end-of-line format
+   ;; (default "%I@%S")
    dotspacemacs-frame-title-format "%I@%S"
 
-   ;; TODO
+   ;; Format specification for setting the icon title format
+   ;; (default nil - same as frame-title-format)
    dotspacemacs-icon-title-format nil
 
-   ;; TODO
+   ;; Run `spacemacs/prettify-org-buffer' when
+   ;; visiting README.org files of Spacemacs.
+   ;; (default nil)
    dotspacemacs-pretty-docs t))
 
 ;;;; Evil
@@ -245,10 +269,15 @@
    ;; start. (default nil)
    dotspacemacs-auto-resume-layouts nil
 
-   ;; TODO
+   ;; If non-nil, auto-generate layout name when creating new layouts. Only has
+   ;; effect when using the "jump to layout by number" commands. (default nil)
    dotspacemacs-auto-generate-layout-names t
 
-   ;; TODO
+   ;; Control where `switch-to-buffer' displays the buffer. If nil,
+   ;; `switch-to-buffer' displays the buffer in the current window even if
+   ;; another same-purpose window is available. If non-nil, `switch-to-buffer'
+   ;; displays the buffer in a same-purpose window even if the buffer can be
+   ;; displayed in the current window. (default nil)
    dotspacemacs-switch-to-buffer-prefers-purpose nil))
 
 ;;;; Misc
@@ -269,9 +298,18 @@
    ;; Maximum number of rollback slots to keep in the cache. (default 5)
    dotspacemacs-max-rollback-slots 5
 
+   ;; If non-nil, start an Emacs server if one is not already running.
+   dotspacemacs-enable-server t
+
    ;; If non nil, advise quit functions to keep server open when quitting.
    ;; (default nil)
    dotspacemacs-persistent-server nil
+
+   ;; Set `gc-cons-threshold' and `gc-cons-percentage' when startup finishes.
+   ;; This is an advanced option and should not be changed unless you suspect
+   ;; performance issues due to garbage collection operations.
+   ;; (default '(100000000 0.1))
+   dotspacemacs-gc-cons '(100000000 0.1)
 
    ;; If non nil, `helm' will try to minimize the space it uses. (default nil)
    dotspacemacs-helm-resize nil

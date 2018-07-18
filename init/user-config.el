@@ -54,6 +54,9 @@
   (add-hook 'evil-insert-state-entry-hook 'turn-off-smartparens-mode)
   (add-hook 'evil-insert-state-exit-hook 'turn-on-smartparens-mode))
 
+(defun dotspacemacs/user-config/fish-color ()
+  (add-hook 'term-mode-hook 'toggle-truncate-lines)
+  )
 
 
 (defun dotspacemacs/user-config/toggles ()
@@ -71,10 +74,6 @@
 
   ;(global-prettify-symbols-mode 1)
 
-  (defun replicate (list num)
-    "Creates a list with `num` replicas of `list`"
-    (if (<= num 0) '() (append list (replicate list (- num 1)))))
-
   ; (defun make-spaces (el)
   ;   (let* ((space-width (string-width (car el)))
   ;          (out (append
@@ -90,9 +89,9 @@
 
   (defun make-spaces (el)
     (let ((space-width (string-width (car el))))
-         (append (replicate '(?\s (Br . Bl)) (- space-width 1))
-                 '(?\s (Br . Br))
-                  (list (decode-char 'ucs (cdr el))))))
+      (append  (make-list (- space-width 1) '(?\s (Br . Bl)))
+              '(?\s (Br . Br))
+               (list (decode-char 'ucs (cdr el))))))
 
   (defun make-tabs (el) (string ?\t (cdr el)))
 
@@ -159,7 +158,63 @@ codepoints starting from codepoint-start."
   "Activate column indicator in prog-mode and text-mode"
   (add-hook 'prog-mode-hook 'turn-on-fci-mode)
   (add-hook 'text-mode-hook 'turn-on-fci-mode)
+  (setq fci-rule-color "#586e75")
   )
+
+
+(defun dotspacemacs/user-config/frame-geom ()
+  "Save and restore the frame geometry of emacs windows."
+
+  (defun save-framegeometry ()
+    "Gets the current frame's geometry and saves to ~/.emacs.d/framegeometry."
+    (let (
+          (framegeometry-left (frame-parameter (selected-frame) 'left))
+          (framegeometry-top (frame-parameter (selected-frame) 'top))
+          (framegeometry-width (frame-parameter (selected-frame) 'width))
+          (framegeometry-height (frame-parameter (selected-frame) 'height))
+          (framegeometry-file (expand-file-name "~/.emacs.d/framegeometry"))
+          )
+
+      (when (not (number-or-marker-p framegeometry-left))
+        (setq framegeometry-left 0))
+      (when (not (number-or-marker-p framegeometry-top))
+        (setq framegeometry-top 0))
+      (when (not (number-or-marker-p framegeometry-width))
+        (setq framegeometry-width 0))
+      (when (not (number-or-marker-p framegeometry-height))
+        (setq framegeometry-height 0))
+
+      (with-temp-buffer
+        (insert
+         ";;; This is the previous emacs frame's geometry.\n"
+         ";;; Last generated " (current-time-string) ".\n"
+         "(setq initial-frame-alist\n"
+         "      '(\n"
+         (format "        (top . %d)\n" (max framegeometry-top 0))
+         (format "        (left . %d)\n" (max framegeometry-left 0))
+         (format "        (width . %d)\n" (max framegeometry-width 0))
+         (format "        (height . %d)))\n" (max framegeometry-height 0)))
+        (when (file-writable-p framegeometry-file)
+          (write-file framegeometry-file))))
+    )
+
+  (defun load-framegeometry ()
+    "Loads ~/.emacs.d/framegeometry which should load the previous frame's
+  geometry."
+    (let ((framegeometry-file (expand-file-name "~/.emacs.d/framegeometry")))
+      (when (file-readable-p framegeometry-file)
+        (load-file framegeometry-file)))
+    )
+
+
+  ;; Restore Frame size and location, if we are using gui emacs
+  (if window-system
+      (progn
+        (add-hook 'after-init-hook 'load-framegeometry)
+        (add-hook 'kill-emacs-hook 'save-framegeometry))
+    )
+  )
+
 
 
   ;; ;; Enable org's table editor in markdown mode

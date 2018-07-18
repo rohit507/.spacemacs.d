@@ -1,7 +1,7 @@
 (configuration-layer/declare-layers
  '(
    ;; Spacemacs layers
-   spacemacs-modeline
+   ; spacemacs-modeline
    theming
 
    ;; Personal layers

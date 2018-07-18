@@ -54,6 +54,8 @@
 (defconst pretty-fonts-fira-font
   '(;; OPERATORS  ;; We use this format instead of the old one because it
     ;; the priorities work better
+    (2 "\\(\\/\\\\\\)"                #X22c0)
+    (2 "\\(\\\\\/\\)"                #X22c1)
     (3 "\\(www\\)"                   #Xe100)
     (2 "[^/]\\(\\*\\*\\)[^/]"        #Xe101)
     (3 "\\(\\*\\*\\*\\)"             #Xe102)
