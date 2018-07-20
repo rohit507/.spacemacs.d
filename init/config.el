@@ -133,7 +133,7 @@
    dotspacemacs-inactive-transparency 50
 
    ;; If non nil unicode symbols are displayed in the mode line. (default t)
-   dotspacemacs-mode-line-unicode-symbols t
+   dotspacemacs-mode-line-unicode-symbols nil
 
    ;; Either nil or a number of seconds. If non-nil zone out after the specified
    ;; number of seconds. (default nil)
@@ -299,7 +299,7 @@
    dotspacemacs-max-rollback-slots 5
 
    ;; If non-nil, start an Emacs server if one is not already running.
-   dotspacemacs-enable-server t
+   dotspacemacs-enable-server nil
 
    ;; If non nil, advise quit functions to keep server open when quitting.
    ;; (default nil)
