@@ -13,9 +13,27 @@
   (dotspacemacs/user-config/line-width-bar)
   (dotspacemacs/user-config/toggles)
   (dotspacemacs/user-config/fish-color)
+  (dotspacemacs/user-config/undo-tree-settings)
+
   ;; Change the default quit function to one that does not
   ;; interfere with an emacs-server setup
   ;;(evil-leader/set-key “q q” ‘spacemacs/frame-killer)
+  )
+
+(defun dotspacemacs/user-config/undo-tree-settings ()
+  "set up our global undotree and presistent undo settings"
+
+  (defadvice undo-tree-make-history-save-file-name
+     (after undo-tree activate)
+     (setq ad-return-value (concat ad-return-value ".gz")))
+
+  (global-undo-tree-mode)
+  
+  (setq undo-tree-auto-save-history t
+        undo-tree-history-directory-alist
+        `(("." . ,(concat spacemacs-cache-directory "undo"))))
+  (unless (file-exists-p (concat spacemacs-cache-directory "undo"))
+          (make-directory (concat spacemacs-cache-directory "undo"))) 
   )
 
 (defun dotspacemacs/user-config/pandoc ()
