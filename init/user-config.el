@@ -15,6 +15,9 @@
   (dotspacemacs/user-config/fish-color)
   (dotspacemacs/user-config/undo-tree-settings)
 
+  (with-eval-after-load 'intero
+    (flycheck-add-next-checker 'intero '(warning . haskell-hlint)))
+
   ;; Change the default quit function to one that does not
   ;; interfere with an emacs-server setup
   ;;(evil-leader/set-key “q q” ‘spacemacs/frame-killer)
