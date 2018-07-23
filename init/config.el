@@ -97,16 +97,16 @@
                                ;  :width normal
                                ;  :powerline-scale 2)
                                ("Fira Code Retina"
-                                :size 15
+                                :size 13
                                 :weight normal
                                 :width normal
                                 :powerline-scale 1.8)
                                ; ("Fira Code"
-                               ;  :size 15
+                               ;  :size 13
                                ;  :weight normal
                                ;  :width normal
                                ;  :powerline-scale 1.8)
-                               ("Fira Code Symbol" :size 15)
+                               ("Fira Code Symbol" :size 13)
                                )
 
    ;; If non nil the frame is fullscreen when Emacs starts up. (default nil)
