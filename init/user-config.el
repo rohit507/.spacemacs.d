@@ -12,6 +12,7 @@
   (dotspacemacs/user-config/defeat-smartparens)
   (dotspacemacs/user-config/line-width-bar)
   (dotspacemacs/user-config/toggles)
+  (dotspacemacs/user-config/fish-color)
   ;; Change the default quit function to one that does not
   ;; interfere with an emacs-server setup
   ;;(evil-leader/set-key “q q” ‘spacemacs/frame-killer)
