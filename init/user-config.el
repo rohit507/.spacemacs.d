@@ -31,12 +31,16 @@
      (setq ad-return-value (concat ad-return-value ".gz")))
 
   (global-undo-tree-mode)
-  
+
   (setq undo-tree-auto-save-history t
         undo-tree-history-directory-alist
         `(("." . ,(concat spacemacs-cache-directory "undo"))))
   (unless (file-exists-p (concat spacemacs-cache-directory "undo"))
-          (make-directory (concat spacemacs-cache-directory "undo"))) 
+    (make-directory (concat spacemacs-cache-directory "undo")))
+
+  (add-to-list 'warning-suppress-types '(undo discard-info))
+
+
   )
 
 (defun dotspacemacs/user-config/pandoc ()
