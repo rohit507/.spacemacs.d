@@ -14,6 +14,8 @@
   (dotspacemacs/user-config/toggles)
   (dotspacemacs/user-config/fish-color)
   (dotspacemacs/user-config/undo-tree-settings)
+  (dotspacemacs/user-config/haskell-indent-settings)
+  (dotspacemacs/user-config/haskell-hare)
 
   (with-eval-after-load 'intero
     (flycheck-add-next-checker 'intero '(warning . haskell-hlint)))
@@ -21,6 +23,14 @@
   ;; Change the default quit function to one that does not
   ;; interfere with an emacs-server setup
   ;;(evil-leader/set-key “q q” ‘spacemacs/frame-killer)
+  )
+
+(defun dotspacemacs/user-config/haskell-hare ()
+  "Enable the HaRe haskell refactorer"
+  (add-to-load-path "~/.cabal/share/x86_64-linux-ghc-8.0.2/HaRe-0.8.4.1/elisp")
+  (require 'hare)
+  (autoload 'hare-init "hare" nil t)
+  (add-hook 'haskell-mode-hook (lambda () (ghc-init) (hare-init)))
   )
 
 (defun dotspacemacs/user-config/haskell-indent-settings ()
