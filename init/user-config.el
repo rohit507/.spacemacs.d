@@ -23,6 +23,20 @@
   ;;(evil-leader/set-key “q q” ‘spacemacs/frame-killer)
   )
 
+(defun dotspacemacs/user-config/haskell-indent-settings ()
+  "Setting for writing haskell code"
+
+  (defun haskell-style ()
+    "Sets the current buffer to use Haskell Style. Meant to be
+  added to `haskell-mode-hook'"
+    (interactive)
+    (setq tab-width 4
+          haskell-indentation-layout-offset 4
+          haskell-indentation-left-offset 4
+          haskell-indentation-ifte-offset 4))
+
+  (add-hook 'haskell-mode-hook 'haskell-style)
+  )
 (defun dotspacemacs/user-config/undo-tree-settings ()
   "set up our global undotree and presistent undo settings"
 
