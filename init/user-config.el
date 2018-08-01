@@ -58,7 +58,11 @@
 
   (setq undo-tree-auto-save-history t
         undo-tree-history-directory-alist
-        `(("." . ,(concat spacemacs-cache-directory "undo"))))
+        `(("." . ,(concat spacemacs-cache-directory "undo")))
+        undo-limit        100000000000
+        undo-strong-limit 120000000000
+        undo-outer-limit  100000000000)
+
   (unless (file-exists-p (concat spacemacs-cache-directory "undo"))
     (make-directory (concat spacemacs-cache-directory "undo")))
 
