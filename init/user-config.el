@@ -50,9 +50,9 @@
 (defun dotspacemacs/user-config/undo-tree-settings ()
   "set up our global undotree and presistent undo settings"
 
-  (defadvice undo-tree-make-history-save-file-name
-     (after undo-tree activate)
-     (setq ad-return-value (concat ad-return-value ".gz")))
+  ;; (defadvice undo-tree-make-history-save-file-name
+  ;;    (after undo-tree activate)
+  ;;    (setq ad-return-value (concat ad-return-value ".gz")))
 
   (global-undo-tree-mode)
 
